@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-notes-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: django-notes-app
+  template:
+    metadata:
+      labels:
+        app: django-notes-app
+    spec:
+      containers:
+      - name: web
+        image: ghcr.io/saketanand007/django-notes-app:latest
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-notes-service
+spec:
+  selector:
+    app: django-notes-app
+  ports:
+    - port: 80
+      targetPort: 8000
+  type: LoadBalancer
